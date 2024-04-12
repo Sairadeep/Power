@@ -86,33 +86,37 @@ fun PowerSOS() {
                 "${powerClick.intValue}, screenState: ${screenState.value}"
             )
 
-            if (!timerState.value) timer.start()
+            if (!timerState.value) {
+                timer.start()
+            }
 
         }
     }
 
     timer = object : CountDownTimer(5000, 1000) {
         override fun onTick(millisUntilFinished: Long) {
-            if ((millisUntilFinished / 1000) <= 5 && powerClick.intValue == 3) {
+            if ((millisUntilFinished / 1000) <= 5 && powerClick.intValue == 4) {
                 Log.d(
                     "ScreenedValueState",
                     "Received power click: ${powerClick.intValue} clicks of power button"
                 )
                 callStatus.value = true
                 timer.cancel()
+                timerState.value = false
                 powerClick.intValue = 0
             } else if (powerClick.intValue > 5) {
                 powerClick.intValue = 0
                 callStatus.value = false
             }
-            timerState.value = false
         }
 
         override fun onFinish() {
             powerClick.intValue = 0
+            timerState.value = false
         }
 
     }
+
 
     // Register and Unregister Receiver
     DisposableEffect(context) {
